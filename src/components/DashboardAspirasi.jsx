@@ -5,7 +5,7 @@ import { readExcelFile } from "../utils/excelReader";
 import ChartCard from "./ChartCard";
 import DataTable from "./DataTable";
 import FilterBar from "./FilterBar";
-import indonesiaGeo from "../../public/indonesia.json";
+import indonesiaGeo from "../assets/indonesia.json";
 import { PROV_RENAME_MAP } from "../utils/prov";
 
 const DashboardAspirasi = () => {
