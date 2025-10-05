@@ -57,8 +57,10 @@ const ChartCard = ({ title, chartData }) => {
             axisPointer: { type: "shadow" },
             formatter: (params) => {
               const p = params[0];
-              return `<strong>${p.name}</strong><br/>Jumlah: ${p.value}`;
+              const isPct = chartData.extra?.isPercentage;
+              return `<strong>${p.name}</strong><br/>${isPct ? "Rata-rata Progress" : "Jumlah"}: ${p.value.toFixed(1)}${isPct ? "%" : ""}`;
             },
+
           },
           grid: { left: "12%", right: "8%", bottom: "10%", top: "5%", containLabel: true },
           xAxis: { type: "value", axisLabel: { color: "#4B5563" } },
@@ -66,6 +68,7 @@ const ChartCard = ({ title, chartData }) => {
             type: "category",
             data: sortedData.map((d) => d.name),
             axisLabel: { color: "#4B5563", fontWeight: 600 },
+            inverse: true 
           },
           series: [
             {
@@ -79,12 +82,17 @@ const ChartCard = ({ title, chartData }) => {
                     ] || "#C4B5FD",
                 },
               })),
-              label: {
-                show: true,
-                position: "right",
-                color: "#6B21A8",
-                fontWeight: "bold",
-              },
+            label: {
+              show: true,
+              position: "right",
+              color: "#6B21A8",
+              fontWeight: "bold",
+              formatter: (p) =>
+                chartData.extra?.isPercentage
+                  ? `${p.value.toFixed(1)}%`
+                  : p.value,
+            },
+
             },
           ],
         };
