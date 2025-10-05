@@ -119,44 +119,69 @@ const ChartCard = ({ title, chartData }) => {
       }
     }
 
-    // === TIPE MAP ===
+    // === TIPE MAP ==
     else if (chartData.type === "map") {
-      option = {
-        tooltip: { trigger: "item" },
-        visualMap: {
-          left: "left",
-          min: 0,
-          max: Math.max(...chartData.data.map((d) => d.value)) || 10,
-          text: ["Banyak", "Sedikit"],
-          inRange: { color: ["#4ADE80", "#FACC15", "#FB923C"] },
-          calculable: true,
+  option = {
+    tooltip: {
+      trigger: "item",
+    },
+    visualMap: {
+      min: 0,
+      max: Math.max(...chartData.data.map((d) => d.value)) || 10,
+      text: ["Banyak", "Sedikit"],
+      inRange: {
+        color: ["#E0F2FE", "#CEE3CC", "#2C7026"],
+      },
+      calculable: true,
+      orient: "horizontal",
+      left: "center",
+      bottom: 10,
+    },
+    series: [
+      {
+        name: "Sebaran Aspirasi",
+        type: "map",
+        map: "Indonesia",
+        roam: false, // ❌ no zoom/pan
+        nameProperty: "Propinsi", // 🧠 sesuaikan dengan geojson kamu
+        mapValueCalculation: "sum",
+        encode: { value: "value" },
+        // 🧩 Data sudah dinormalisasi agar cocok
+        data: chartData.data.map((d) => ({
+          name: d.name.toUpperCase().replace(/^DI\.?\s*/i, ""), // hilangkan "DI." dan kapital
+          value: d.value,
+        })),
+        // ✅ styling tiap provinsi
+        itemStyle: {
+          areaColor: "#EDE9FE",
+          borderColor: "#A78BFA",
+          borderWidth: 0.7,
         },
-        geo: {
-          map: "Indonesia",
-          roam: false, // nonaktifin zoom & pan
-          zoom: 1.2,
-          center: [120, -2],
-          label: { show: false },
+        emphasis: {
+          label: {
+            show: true,
+            color: "#111",
+            fontWeight: "bold",
+            backgroundColor: "#fff",
+            padding: 4,
+            borderRadius: 4,
+          },
           itemStyle: {
-            borderColor: "#999",
-            areaColor: "#EDE9FE",
-          },
-          emphasis: {
-            label: { show: true, color: "#000", fontWeight: "bold" },
-            itemStyle: { areaColor: "#FACC15" },
+            areaColor: "#FACC15", // 💛 hanya provinsi yang dihover berubah
+            borderColor: "#7C3AED",
+            borderWidth: 1.5,
           },
         },
-        series: [
-          {
-            name: "Sebaran Aspirasi",
-            type: "map",
-            map: "Indonesia",
-            geoIndex: 0,
-            data: chartData.data,
+        select: {
+          itemStyle: {
+            areaColor: "#FB923C",
           },
-        ],
-      };
-    }
+        },
+      },
+    ],
+  };
+}
+
 
     // === TIPE LINE ===
     else if (chartData.type === "line") {

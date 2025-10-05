@@ -6,6 +6,7 @@ import ChartCard from "./ChartCard";
 import DataTable from "./DataTable";
 import FilterBar from "./FilterBar";
 import indonesiaGeo from "../../public/indonesia.json";
+import { PROV_RENAME_MAP } from "../utils/prov";
 
 const DashboardAspirasi = () => {
   const [data, setData] = useState([]);
@@ -15,9 +16,41 @@ const DashboardAspirasi = () => {
     "Prioritas": "Semua",
   });
 
-  useEffect(() => {
-    echarts.registerMap("Indonesia", indonesiaGeo);
-  }, []);
+useEffect(() => {
+  if (!indonesiaGeo) return;
+
+  const fixedGeo = {
+    ...indonesiaGeo,
+    features: indonesiaGeo.features.map((f) => {
+      // Ambil nama dari properti geoJSON (huruf besar semua)
+      const rawName =
+        f.properties?.Propinsi ||
+        "";
+
+      // Normalisasi (hapus spasi ekstra dan ubah ke Title Case)
+      const upper = rawName.trim().toUpperCase();
+      const mappedName = PROV_RENAME_MAP[upper] || toTitleCase(upper) ;
+
+      return {
+        ...f,
+        name: mappedName,
+      };
+    }),
+  };
+
+
+  echarts.registerMap("Indonesia", fixedGeo);
+}, []);
+
+// Helper: ubah "SUMATERA UTARA" → "Sumatera Utara"
+function toTitleCase(str) {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -82,6 +115,7 @@ const DashboardAspirasi = () => {
     return acc;
   }, {});
 
+ 
   const totalAnggaran = filtered
     .map((d) => Number(String(d.estimasi_anggaran).replace(/\D/g, "")) || 0)
     .reduce((a, b) => a + b, 0);
@@ -157,17 +191,24 @@ const DashboardAspirasi = () => {
           <h2 className="text-3xl font-bold border-l-4 border-purple-500 pl-3 mb-6">
             Tren Partisipasi Waktu ke Waktu
           </h2>
-          <ChartCard title="" chartData={{
-            type: "line",
-            data: (() => {
-              const g = {};
-              filtered.forEach(d => {
-                const t = new Date(d.tanggal_input).toISOString().slice(0, 10);
-                g[t] = (g[t] || 0) + 1;
-              });
-              return Object.entries(g).map(([name, value]) => ({ name, value }));
-            })(),
-          }} />
+          <ChartCard
+            title="Tren Waktu Aspirasi"
+            chartData={{
+              type: "line",
+              data: (() => {
+                const g = {};
+                filtered.forEach((d) => {
+                  const t = new Date(d.tanggal_input).toISOString().slice(0, 10);
+                  g[t] = (g[t] || 0) + 1;
+                });
+                return Object.entries(g)
+                  .sort(([a], [b]) => new Date(a) - new Date(b)) // ⬅️ urut dari lama ke baru (timeline natural)
+                  .map(([name, value]) => ({ name, value }));
+              })(),
+            }}
+          />
+
+
         </motion.section>
 
         <motion.section variants={fadeIn} initial="hidden" whileInView="show">
