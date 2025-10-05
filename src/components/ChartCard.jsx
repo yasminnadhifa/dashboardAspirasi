@@ -1,11 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
-const gradientColors = [
-  "#7C3AED", "#A78BFA", "#C084FC", "#E879F9", "#F472B6",
-  "#FB923C", "#FACC15", "#EAB308", "#4ADE80", "#22C55E",
-  "#14B8A6", "#38BDF8", "#3B82F6", "#6366F1",
+const colors = [
+  "#22C55E", 
+  "#4ADE80", 
+  "#A3E635", 
+  "#EAB308",
+  "#FACC15", 
+  "#DDD6FE",
+  "#C084FC", 
+  "#A78BFA", 
+  "#8B5CF6", 
+  "#7C3AED", 
 ];
+
 
 const ChartCard = ({ title, chartData }) => {
   const chartRef = useRef(null);
@@ -26,11 +34,11 @@ const ChartCard = ({ title, chartData }) => {
     if (chartData.type === "pie") {
       option = {
         tooltip: { trigger: "item" },
-        color: gradientColors,
+        color: colors,
         series: [
           {
             type: "pie",
-            radius: "70%",
+            radius: ["45%", "70%"],
             data: chartData.data,
             label: { show: true, color: "#374151" },
           },
@@ -40,11 +48,6 @@ const ChartCard = ({ title, chartData }) => {
 
     // === TIPE BAR ===
     else if (chartData.type === "bar") {
-      const rankColors = [
-        "#7C3AED", "#A78BFA", "#C084FC", "#E879F9",
-        "#F472B6", "#FBBF24", "#FACC15", "#4ADE80",
-        "#22C55E", "#86EFAC",
-      ];
       const sortedData = [...chartData.data].sort((a, b) => b.value - a.value);
 
       if (chartData.orientation === "horizontal") {
@@ -71,8 +74,8 @@ const ChartCard = ({ title, chartData }) => {
                 value: d.value,
                 itemStyle: {
                   color:
-                    rankColors[
-                      Math.floor((i / sortedData.length) * rankColors.length)
+                    colors[
+                      Math.floor((i / sortedData.length) * colors.length)
                     ] || "#C4B5FD",
                 },
               })),
@@ -102,8 +105,8 @@ const ChartCard = ({ title, chartData }) => {
                 value: d.value,
                 itemStyle: {
                   color:
-                    rankColors[
-                      Math.floor((i / sortedData.length) * rankColors.length)
+                    colors[
+                      Math.floor((i / sortedData.length) * colors.length)
                     ] || "#C4B5FD",
                 },
               })),
@@ -129,9 +132,7 @@ const ChartCard = ({ title, chartData }) => {
       min: 0,
       max: Math.max(...chartData.data.map((d) => d.value)) || 10,
       text: ["Banyak", "Sedikit"],
-      inRange: {
-        color: ["#E0F2FE", "#CEE3CC", "#2C7026"],
-      },
+      inRange: { color: ["#E0F2FE", "#C4B5FD", "#7C3AED"] },
       calculable: true,
       orient: "horizontal",
       left: "center",
