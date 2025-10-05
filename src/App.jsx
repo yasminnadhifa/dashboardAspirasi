@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardAspirasi from "./components/DashboardAspirasi";
+import FloatingHelpButton from "./components/FloatingHelpButton";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <main className="p-6">
         <DashboardAspirasi />
       </main>
-
+     <FloatingHelpButton></FloatingHelpButton>
       {/* Footer */}
       <footer className="p-4 text-center bg-gradient-to-r from-yellow-400 via-orange-300 to-purple-400 text-gray-900 font-medium shadow-inner mt-6">
         © {new Date().getFullYear()} 
