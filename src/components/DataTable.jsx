@@ -14,11 +14,11 @@ const DataTable = ({ data }) => {
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(0);
 
-  // ✅ Generate columns otomatis dari key data
+
   const columns = useMemo(() => {
     if (!data.length) return [];
     return Object.keys(data[0]).map((key) => ({
-      accessorKey: key.trim(), // pastikan bersih dari spasi
+      accessorKey: key.trim(), 
       header: key.replaceAll("_", " ").toUpperCase(),
       cell: (info) => {
         const val = info.getValue();
@@ -28,7 +28,6 @@ const DataTable = ({ data }) => {
     }));
   }, [data]);
 
-  // ✅ Setup TanStack Table
   const table = useReactTable({
     data,
     columns,
@@ -59,7 +58,6 @@ const DataTable = ({ data }) => {
 
   return (
     <div className="bg-white border border-yellow-200 rounded-xl shadow-sm p-4">
-      {/* 🔍 Search + Page Size */}
       <div className="flex flex-wrap justify-between items-center mb-3">
         <input
           type="text"
@@ -82,7 +80,6 @@ const DataTable = ({ data }) => {
         </select>
       </div>
 
-      {/* 🧾 Table */}
       <div className="overflow-x-auto rounded-lg">
         <table className="min-w-full text-sm">
           <thead className="bg-gradient-to-r from-yellow-200 via-orange-200 to-yellow-100 text-purple-900 font-semibold">
@@ -131,7 +128,6 @@ const DataTable = ({ data }) => {
         </table>
       </div>
 
-      {/* 📄 Pagination */}
       <div className="flex flex-wrap justify-between items-center mt-4 gap-3">
         <div className="text-sm text-gray-600">
           Menampilkan{" "}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
-import { motion } from "framer-motion";
 import { readExcelFile } from "../utils/excelReader";
 import ChartCard from "./ChartCard";
 import DataTable from "./DataTable";
@@ -71,18 +70,18 @@ const DashboardAspirasi = () => {
 if (!data.length) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] sm:min-h-screen px-6 py-12 text-center bg-gradient-to-br from-purple-50 via-white to-purple-100">
-      {/* 📊 Icon / Heading */}
+
       <h1 className="text-3xl sm:text-5xl font-extrabold text-purple-700 mb-4 drop-shadow-sm">
         📊 
       </h1>
 
-      {/* 📝 Deskripsi */}
+
       <p className="text-gray-600 text-sm sm:text-base mb-8 max-w-md sm:max-w-lg leading-relaxed">
         Unggah file Excel berisi data aspirasi masyarakat untuk menampilkan
         analisis visual yang interaktif dan informatif.
       </p>
 
-      {/* 📁 Input Upload */}
+
       <label
         htmlFor="file-upload"
         className="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg px-5 py-3 shadow-md transition duration-200 ease-in-out w-full sm:w-auto"
@@ -97,7 +96,6 @@ if (!data.length) {
         />
       </label>
 
-      {/* 🧩 Tips kecil di bawah */}
       <p className="text-xs sm:text-sm text-gray-400 mt-4">
         Format yang didukung: <strong>.xlsx</strong> atau <strong>.xls</strong>
       </p>
@@ -134,7 +132,6 @@ if (!data.length) {
     .reduce((a, b) => a + b, 0);
 
   const progressRata = (() => {
-    // Ambil hanya aspirasi valid (bukan "Ditolak" & progress valid)
     const validProgress = filtered
       .filter(
         (d) =>
@@ -292,10 +289,10 @@ if (!data.length) {
 
                   return Object.entries(g)
                     .map(([name, value]) => ({ name, value }))
-                    .sort((a, b) => b.value - a.value) // 🔽 urut dari nilai tertinggi ke terendah
-                    .slice(0, 10); // 🎯 ambil hanya 10 kategori teratas
+                    .sort((a, b) => b.value - a.value) 
+                    .slice(0, 10); 
                 })(),
-                extra: { isCurrency: true }, // 💰 biar format Rp di ChartCard aktif (opsional)
+                extra: { isCurrency: true }, 
               }}
             />
           </div>
@@ -318,7 +315,7 @@ if (!data.length) {
                   g[t] = (g[t] || 0) + 1;
                 });
                 return Object.entries(g)
-                  .sort(([a], [b]) => new Date(a) - new Date(b)) // ⬅️ urut dari lama ke baru (timeline natural)
+                  .sort(([a], [b]) => new Date(a) - new Date(b)) // 
                   .map(([name, value]) => ({ name, value }));
               })(),
             }}
@@ -358,7 +355,7 @@ if (!data.length) {
 
                   filtered.forEach((d) => {
                     const status = (d.status_aspirasi || "").toLowerCase();
-                    if (status === "ditolak") return; // ❌ Skip aspirasi yang ditolak
+                    if (status === "ditolak") return; 
 
                     const opd = d.opd_instansi_terkait || "Tidak Diketahui";
                     const val = parseFloat(
@@ -376,16 +373,16 @@ if (!data.length) {
                   const avgPerOpd = Object.entries(group).map(
                     ([name, values]) => ({
                       name,
-                      value: values.reduce((a, b) => a + b, 0) / values.length, // 💡 rata-rata persen
+                      value: values.reduce((a, b) => a + b, 0) / values.length, 
                     })
                   );
 
                   return avgPerOpd
                     .sort((a, b) => b.value - a.value)
-                    .slice(0, 10); // ambil top 10
+                    .slice(0, 10);
                 })(),
                 extra: {
-                  isPercentage: true, // ⚙️ info tambahan buat ChartCard
+                  isPercentage: true, 
                 },
               }}
             />
@@ -409,8 +406,8 @@ if (!data.length) {
 
                   return Object.entries(g)
                     .map(([name, value]) => ({ name, value }))
-                    .sort((a, b) => b.value - a.value) // 🔽 urut dari yang tertinggi ke terendah
-                    .slice(0, 10); // tampilkan Top 10 biar visual tetap rapi
+                    .sort((a, b) => b.value - a.value) 
+                    .slice(0, 10); 
                 })(),
               }}
             />

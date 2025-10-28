@@ -17,12 +17,11 @@ const colors = [
 
 const ChartCard = ({ title, chartData }) => {
   const chartRef = useRef(null);
-  const chartInstance = useRef(null); // 👈 simpan instance biar gak recreate terus
+  const chartInstance = useRef(null); 
 
   useEffect(() => {
     if (!chartRef.current) return;
 
-    // 🔧 inisialisasi chart hanya sekali
     if (!chartInstance.current) {
       chartInstance.current = echarts.init(chartRef.current);
     }
@@ -30,7 +29,6 @@ const ChartCard = ({ title, chartData }) => {
     const chart = chartInstance.current;
     let option = {};
 
-    // === TIPE PIE ===
     if (chartData.type === "pie") {
       option = {
         tooltip: { trigger: "item" },
@@ -46,7 +44,6 @@ const ChartCard = ({ title, chartData }) => {
       };
     }
 
-    // === TIPE BAR ===
     else if (chartData.type === "bar") {
       const sortedData = [...chartData.data].sort((a, b) => b.value - a.value);
 
@@ -130,7 +127,7 @@ const ChartCard = ({ title, chartData }) => {
       }
     }
 
-    // === TIPE MAP ==
+
     else if (chartData.type === "map") {
   option = {
     tooltip: {
@@ -151,16 +148,16 @@ const ChartCard = ({ title, chartData }) => {
         name: "Sebaran Aspirasi",
         type: "map",
         map: "Indonesia",
-        roam: false, // ❌ no zoom/pan
-        nameProperty: "Propinsi", // 🧠 sesuaikan dengan geojson kamu
+        roam: false, // 
+        nameProperty: "Propinsi", // 
         mapValueCalculation: "sum",
         encode: { value: "value" },
-        // 🧩 Data sudah dinormalisasi agar cocok
+ 
         data: chartData.data.map((d) => ({
-          name: d.name.toUpperCase().replace(/^DI\.?\s*/i, ""), // hilangkan "DI." dan kapital
+          name: d.name.toUpperCase().replace(/^DI\.?\s*/i, ""), 
           value: d.value,
         })),
-        // ✅ styling tiap provinsi
+     
         itemStyle: {
           areaColor: "#EDE9FE",
           borderColor: "#A78BFA",
@@ -176,7 +173,7 @@ const ChartCard = ({ title, chartData }) => {
             borderRadius: 4,
           },
           itemStyle: {
-            areaColor: "#FACC15", // 💛 hanya provinsi yang dihover berubah
+            areaColor: "#FACC15", 
             borderColor: "#7C3AED",
             borderWidth: 1.5,
           },
@@ -248,16 +245,16 @@ const ChartCard = ({ title, chartData }) => {
       };
     }
 
-    // 🧩 Render Chart
+
     chart.setOption(option);
 
-    // 📱 Responsiveness
+
     const resizeObserver = new ResizeObserver(() => {
       chart.resize();
     });
     resizeObserver.observe(chartRef.current);
 
-    // 🧼 Cleanup
+
     return () => {
       resizeObserver.disconnect();
       chart.dispose();
