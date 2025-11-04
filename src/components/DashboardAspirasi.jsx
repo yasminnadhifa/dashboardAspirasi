@@ -6,6 +6,7 @@ import DataTable from "./DataTable";
 import FilterBar from "./FilterBar";
 import indonesiaGeo from "../assets/indonesia.json";
 import { PROV_RENAME_MAP } from "../utils/prov";
+import { motion } from "framer-motion";
 
 const DashboardAspirasi = () => {
   const [data, setData] = useState([]);
